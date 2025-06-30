@@ -1,41 +1,22 @@
-<div class="tab-exam">
-<mat-tab-group dynamicHeight>
-    <mat-tab *ngFor="let item of data" [label]="'Examen categoria ' + item.examen">
-      <table mat-table [dataSource]="item.categori" class="mat-elevation-z8">
-
-        <!--- Note that these columns can be defined in any order.
-              The actual rendered columns are set as a property on the row definition" -->
-      
-        <!-- Position Column -->
-        <ng-container matColumnDef="position">
-          <th mat-header-cell *matHeaderCellDef> No. </th>
-          <td mat-cell *matCellDef="let element">{{element.disciplina}}  {{getMaxQuestions(element)}} </td>
-        </ng-container>
-      
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let element"> <mat-form-field appearance="fill">
-            <mat-label>Număr întrebări</mat-label>
-            <input matInput type="number" [max]="getMaxQuestions(element)" min="1">
-            <mat-hint>Maxim: {{ getMaxQuestions(element) }}</mat-hint>
-          </mat-form-field></td>
-        </ng-container>
-      
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-      
-      
-      <div *ngFor="let disciplina of item.categori" style="display: flex; flex-direction: row; justify-content: space-evenly;">
-        <h5>{{ disciplina.disciplina }}</h5>  
-        <mat-form-field appearance="fill">
-          <mat-label>Număr întrebări</mat-label>
-          <input matInput type="number" [max]="getMaxQuestions(disciplina)" min="1">
-          <mat-hint>Maxim: {{ getMaxQuestions(disciplina) }}</mat-hint>
-        </mat-form-field>
-      </div>
-  </mat-tab>
-</mat-tab-group>
-<button matButton="elevated">Basic</button>
-</div>
+<form [formGroup]="examenForm" (ngSubmit)="submit()">
+  <mat-form-field appearance="fill">
+    <mat-label>Selectează examen</mat-label>
+    <mat-select formControlName="examen" [(value)]="selectedExamen" (selectionChange)="onExamenChange()">
+      <mat-option *ngFor="let item of data" [value]="item.examen">{{ item.examen }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+<div *ngFor="let disciplina of selectedCategori">
+    <mat-form-field appearance="fill">
+      <mat-label>{{ disciplina.disciplina }} - Nr. întrebări</mat-label>
+      <input
+        matInput
+        type="number"
+        [formControlName]="disciplina.disciplina"
+        [attr.max]="disciplina.intrebari.length"
+        min="1"
+      />
+      <mat-hint>Max: {{ disciplina.intrebari.length }}</mat-hint>
+    </mat-form-field>
+  </div>
+<button matButton="outlined">Show snack-bar</button>
+</form>

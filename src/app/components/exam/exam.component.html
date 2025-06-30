@@ -1,0 +1,15 @@
+<h2>Examen categoria {{ examTitle }}</h2>
+
+<form (ngSubmit)="submitExam()">
+  <div *ngFor="let q of allQuestions; let i = index" style="margin-bottom: 2em;">
+    <p><b>Întrebarea {{ i + 1 }}:</b> {{ q.intrebare }}</p>
+
+    <mat-radio-group [(ngModel)]="answers[i]" name="q{{i}}">
+      <mat-radio-button *ngFor="let r of q.raspunsuri; let j = index" [value]="j">
+        {{ r }}
+      </mat-radio-button>
+    </mat-radio-group>
+  </div>
+
+  <button mat-raised-button color="primary" type="submit">Trimite examenul</button>
+</form>
