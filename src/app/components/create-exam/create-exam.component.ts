@@ -5,6 +5,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule} from '@angular/material/select';
 import { BrowserModule } from '@angular/platform-browser'
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import {MatTabsModule} from '@angular/material/tabs';
 
 @Component({
   selector: 'app-create-exam',
@@ -13,6 +15,8 @@ import { CommonModule } from '@angular/common';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatButtonModule,
+    MatTabsModule,
     CommonModule],
   templateUrl: './create-exam.component.html',
   styleUrl: './create-exam.component.css'
