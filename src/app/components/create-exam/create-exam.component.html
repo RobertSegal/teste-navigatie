@@ -1,0 +1,17 @@
+<mat-form-field appearance="fill">
+    <mat-label>Selectează examenul</mat-label>
+    <mat-select [(value)]="selectedExamen" (selectionChange)="onExamenChange()">
+      <mat-option *ngFor="let item of data" [value]="item.examen">{{ item.examen }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+  <div *ngFor="let disciplina of selectedCategori">
+    <h3>{{ disciplina.disciplina }}</h3>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Număr întrebări</mat-label>
+      <input matInput type="number" [max]="getMaxQuestions(disciplina)" min="1">
+      <mat-hint>Maxim: {{ getMaxQuestions(disciplina) }}</mat-hint>
+    </mat-form-field>
+  </div>
+  
