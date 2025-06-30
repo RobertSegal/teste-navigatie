@@ -35,8 +35,9 @@ export class CreateExamComponent  implements OnInit {
   selectedExamen: string = '';
   selectedCategori: any[] = [];
   displayedColumns: string[] = ['position', 'name'];
+  
 
-  constructor(private questionService: QuestionService, private fb: FormBuilder, private router: Router) {}
+  constructor(private questionService: QuestionService, private fb: FormBuilder, private router: Router) {  }
 
   ngOnInit(): void {
     this.questionService.getQuestions().subscribe(res => {
@@ -46,6 +47,7 @@ export class CreateExamComponent  implements OnInit {
     this.examenForm = this.fb.group({
       examen: [null, Validators.required]
     });
+    this.examenForm.addControl('minimumCorrect', this.fb.control(1, [Validators.required, Validators.min(1)]));
   }
 
   onExamenChange(): void {
@@ -70,6 +72,8 @@ export class CreateExamComponent  implements OnInit {
         ])
       );
     }
+
+    this.examenForm.addControl('minimumCorrect', this.fb.control(1, [Validators.required, Validators.min(1)]));
   }
 
   getMaxQuestions(disciplina: any): number {
@@ -100,8 +104,22 @@ export class CreateExamComponent  implements OnInit {
     });
   }
 
-  console.log({ state: { examen, intrebari: result } });
-  this.router.navigateByUrl('/exam', { state: { examen, intrebari: result } });
+  console.log({ 
+      state: { 
+        examen, 
+        intrebari: result,
+        minimumCorrect: this.examenForm.value.minimumCorrect 
+      } 
+    });
+  this.router.navigateByUrl('/exam', 
+    { 
+      state: { 
+        examen, 
+        intrebari: result,
+        minimumCorrect: this.examenForm.value.minimumCorrect 
+      } 
+    }
+  );
   }
 
   shuffleAnswers(question: any): any {

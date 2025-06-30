@@ -18,5 +18,9 @@
       <mat-hint>Max: {{ disciplina.intrebari.length }}</mat-hint>
     </mat-form-field>
   </div>
+  <mat-form-field appearance="fill">
+    <mat-label>Număr minim de răspunsuri corecte pentru promovare</mat-label>
+    <input matInput type="number" formControlName="minimumCorrect" min="1" />
+  </mat-form-field>
 <button matButton="outlined">Show snack-bar</button>
 </form>

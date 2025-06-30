@@ -12,9 +12,9 @@ import {MatRadioModule} from '@angular/material/radio';
   imports: [CommonModule, ReactiveFormsModule, MatRadioModule, MatButtonModule, FormsModule]
 })
 export class ExamComponent {
-  examTitle = '';
-  allQuestions: any[] = [];
-  answers: number[] = [];
+  questions: any[] = [];
+  currentIndex = 0;
+  minimumCorrect: any;
 
   constructor(private router: Router) {
     const nav = this.router.getCurrentNavigation();
@@ -24,22 +24,33 @@ export class ExamComponent {
       this.router.navigateByUrl('/');
       return;
     }
-
-    this.examTitle = state.examen;
-
-    // unificăm toate întrebările într-un singur array
-    this.allQuestions = state.intrebari.flatMap((d: any) => d.intrebari);
-    this.answers = new Array(this.allQuestions.length).fill(null);
+    this.minimumCorrect = state.minimumCorrect || 1;
+    this.questions = state.intrebari.flatMap((d: any) =>
+      d.intrebari.map((q: any) => ({
+        ...q,
+        selectedAnswer: null
+      }))
+    );
   }
 
-  submitExam(): void {
-    let correct = 0;
-    this.allQuestions.forEach((q, i) => {
-      if (q.correctAnswer === this.answers[i]) correct++;
+  prev() {
+    if (this.currentIndex > 0) this.currentIndex--;
+  }
+
+  next() {
+    if (this.currentIndex < this.questions.length - 1) this.currentIndex++;
+  }
+
+  finalize() {
+    this.router.navigateByUrl('/results', {
+      state: {
+        questions: this.questions,
+        minimumCorrect: this.minimumCorrect
+      }
     });
+  }
 
-    const passed = (correct / this.allQuestions.length) >= 0.7;
-
-    alert(`Ai răspuns corect la ${correct} din ${this.allQuestions.length}. ${passed ? 'Ai trecut!' : 'Ai picat.'}`);
+  isIncomplete(): boolean {
+    return this.questions.some(q => q.selectedAnswer === null);
   }
 }

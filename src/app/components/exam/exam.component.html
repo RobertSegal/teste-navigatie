@@ -1,15 +1,21 @@
-<h2>Examen categoria {{ examTitle }}</h2>
+<div *ngIf="questions.length">
+  <p><b>Întrebarea {{ currentIndex + 1 }}/{{ questions.length }}</b></p>
+  <p>{{ questions[currentIndex].intrebare }}</p>
 
-<form (ngSubmit)="submitExam()">
-  <div *ngFor="let q of allQuestions; let i = index" style="margin-bottom: 2em;">
-    <p><b>Întrebarea {{ i + 1 }}:</b> {{ q.intrebare }}</p>
+  <mat-radio-group [(ngModel)]="questions[currentIndex].selectedAnswer">
+    <mat-radio-button
+      *ngFor="let r of questions[currentIndex].raspunsuri; let i = index"
+      [value]="i"
+    >
+      {{ r }}
+    </mat-radio-button>
+  </mat-radio-group>
 
-    <mat-radio-group [(ngModel)]="answers[i]" name="q{{i}}">
-      <mat-radio-button *ngFor="let r of q.raspunsuri; let j = index" [value]="j">
-        {{ r }}
-      </mat-radio-button>
-    </mat-radio-group>
+  <div style="margin-top: 1rem;">
+    <button mat-button (click)="prev()" [disabled]="currentIndex === 0">Prev</button>
+    <button mat-button (click)="next()" [disabled]="currentIndex === questions.length - 1">Next</button>
+    <button mat-raised-button color="primary" (click)="finalize()">
+      Finalizează
+    </button>
   </div>
-
-  <button mat-raised-button color="primary" type="submit">Trimite examenul</button>
-</form>
+</div>

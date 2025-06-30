@@ -1,0 +1,34 @@
+<h2 style="margin-bottom: 1rem;">
+  Rezultatul examenului:
+  <span [ngStyle]="{ color: passed ? 'green' : 'red' }">
+    {{ passed ? 'Promovat ✔️' : 'Respins ❌' }}
+  </span>
+</h2>
+
+<p>
+  Ai răspuns corect la {{ correctCount }} din {{ questions.length }} întrebări.
+  Minim necesar: {{ minimumCorrect }}
+</p>
+
+<mat-checkbox [(ngModel)]="showCorrect">Arată răspunsurile corecte</mat-checkbox>
+
+<div *ngFor="let q of questions" class="result-question" style="margin: 1rem 0;">
+  <p>
+    <b>{{ q.intrebare }}</b>
+    <span *ngIf="q.selectedAnswer === q.correctAnswer" style="color: green;">✔️</span>
+    <span *ngIf="q.selectedAnswer !== q.correctAnswer" style="color: red;">❌</span>
+  </p>
+
+  <p>
+    Răspuns ales:
+    <span [ngStyle]="{ color: q.selectedAnswer === q.correctAnswer ? 'green' : 'red' }">
+      {{ q.raspunsuri[q.selectedAnswer] || 'Nicio alegere' }}
+    </span>
+  </p>
+
+  <p *ngIf="showCorrect && q.selectedAnswer !== q.correctAnswer" style="color: green;">
+    Răspuns corect: {{ q.raspunsuri[q.correctAnswer] }}
+  </p>
+
+  <mat-divider></mat-divider>
+</div>
