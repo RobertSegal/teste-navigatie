@@ -8,6 +8,8 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import {MatTabsModule} from '@angular/material/tabs';
 
+import {MatTableModule} from '@angular/material/table';
+
 @Component({
   selector: 'app-create-exam',
   standalone: true,
@@ -17,6 +19,7 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatSelectModule,
     MatButtonModule,
     MatTabsModule,
+    MatTableModule,
     CommonModule],
   templateUrl: './create-exam.component.html',
   styleUrl: './create-exam.component.css'
@@ -25,6 +28,7 @@ export class CreateExamComponent  implements OnInit {
   data: any[] = [];
   selectedExamen: string = '';
   selectedCategori: any[] = [];
+  displayedColumns: string[] = ['position', 'name'];
 
   constructor(private questionService: QuestionService) {}
 
