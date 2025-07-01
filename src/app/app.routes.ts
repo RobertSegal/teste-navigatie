@@ -8,5 +8,6 @@ export const routes: Routes = [
   { path: 'exam', component: ExamComponent },
   { path: 'create', component: CreateExamComponent },
   { path: 'results', component: ResultsComponent },
-  { path: '', redirectTo: 'create', pathMatch: 'full' }
+  { path: '', redirectTo: 'create', pathMatch: 'full' },
+  { path: '**', redirectTo: 'create', pathMatch: 'full' }
 ];
