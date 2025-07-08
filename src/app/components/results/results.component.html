@@ -4,13 +4,21 @@
     {{ passed ? 'Promovat ✔️' : 'Respins ❌' }}
   </span>
 </h2>
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Ai răspuns corect la {{ correctCount }} din {{ questions.length }} întrebări.</mat-card-title>
+    <mat-card-subtitle>Minim necesar: {{ minimumCorrect }}</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-checkbox [(ngModel)]="showCorrect">Arată răspunsurile corecte</mat-checkbox>
+  </mat-card-content>
+  <mat-card-actions align="end">
+    <button mat-raised-button color="primary" (click)="retake()" >Retake</button>
+    <button mat-raised-button color="secondary" (click)="recreate()" >Create</button>
+  </mat-card-actions>
+</mat-card>
+  
 
-<p>
-  Ai răspuns corect la {{ correctCount }} din {{ questions.length }} întrebări.
-  Minim necesar: {{ minimumCorrect }}
-</p>
-
-<mat-checkbox [(ngModel)]="showCorrect">Arată răspunsurile corecte</mat-checkbox>
 
 <div *ngFor="let q of questions" class="result-question" style="margin: 1rem 0;">
   <p>
@@ -31,4 +39,7 @@
   </p>
 
   <mat-divider></mat-divider>
+
+  
 </div>
+

@@ -30,20 +30,16 @@ import { Router } from '@angular/router';
   styleUrl: './create-exam.component.css'
 })
 export class CreateExamComponent  implements OnInit {
-  data: any[] = [];
+  //data: any[] = [];
   examenForm!: FormGroup;
   selectedExamen: string = '';
   selectedCategori: any[] = [];
   displayedColumns: string[] = ['position', 'name'];
   
 
-  constructor(private questionService: QuestionService, private fb: FormBuilder, private router: Router) {  }
+  constructor(public questionService: QuestionService, private fb: FormBuilder, private router: Router) {  }
 
   ngOnInit(): void {
-    this.questionService.getQuestions().subscribe(res => {
-      this.data = res;
-    });
-
     this.examenForm = this.fb.group({
       examen: [null, Validators.required]
     });
@@ -51,10 +47,9 @@ export class CreateExamComponent  implements OnInit {
   }
 
   onExamenChange(): void {
-    const found = this.data.find(d => d.examen === this.selectedExamen);
+    const found = this.questionService?.data?.find(d => d.examen === this.selectedExamen);
     this.selectedCategori = found ? found.categori : [];
 
-      console.log(this.selectedExamen);
     // curăță disciplinele anterioare
     Object.keys(this.examenForm.controls).forEach(key => {
       if (key !== 'examen') this.examenForm.removeControl(key);
@@ -62,18 +57,26 @@ export class CreateExamComponent  implements OnInit {
 
     // adaugă câte un control pentru fiecare disciplină
     for (let cat of this.selectedCategori) {
-      console.log(cat);
       this.examenForm.addControl(
         cat.disciplina,
-        this.fb.control(1, [
+        this.fb.control(0, [
           Validators.required,
-          Validators.min(1),
+          Validators.min(0),
           Validators.max(cat.intrebari.length)
         ])
       );
     }
 
     this.examenForm.addControl('minimumCorrect', this.fb.control(1, [Validators.required, Validators.min(1)]));
+  
+    console.log(this.selectedExamen);
+    console.log(this.selectedCategori);
+    console.log(this.examenForm.value);
+
+    for (let cat of this.selectedCategori) {
+      const count = this.examenForm.value[cat.disciplina];
+      console.log(count);
+    }
   }
 
   getMaxQuestions(disciplina: any): number {
@@ -81,45 +84,25 @@ export class CreateExamComponent  implements OnInit {
   }
 
   clickButton(){
-    console.log(this.selectedExamen);
-    console.log(this.selectedCategori);
+    //console.log(this.selectedExamen);
+    //console.log(this.selectedCategori);
   }
 
-    submit(): void {
-      const examen = this.examenForm.value.examen;
-  const selected = this.data.find(x => x.examen === examen);
-  const result: any[] = [];
-
-  for (let cat of selected.categori) {
-    const count = this.examenForm.value[cat.disciplina];
-
-    const shuffledQuestions = [...cat.intrebari]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, count)
-      .map(q => this.shuffleAnswers(q)); // 🟢 aici amesteci răspunsurile
-
-    result.push({
-      disciplina: cat.disciplina,
-      intrebari: shuffledQuestions
+  submit(): void {
+  this.router.navigateByUrl('/exam', {
+    state: {
+      examForm: this.examenForm.value
+      }
     });
   }
 
-  console.log({ 
-      state: { 
-        examen, 
-        intrebari: result,
-        minimumCorrect: this.examenForm.value.minimumCorrect 
-      } 
-    });
-  this.router.navigateByUrl('/exam', 
-    { 
-      state: { 
-        examen, 
-        intrebari: result,
-        minimumCorrect: this.examenForm.value.minimumCorrect 
-      } 
+  isValidForm(): boolean{
+    var minAcceptedAnswers = 0;
+    for (let cat of this.selectedCategori) {
+      minAcceptedAnswers += this.examenForm.value[cat.disciplina];
     }
-  );
+    
+    return this.examenForm.valid && minAcceptedAnswers >= this.examenForm.value.minimumCorrect && minAcceptedAnswers > 0;
   }
 
   shuffleAnswers(question: any): any {

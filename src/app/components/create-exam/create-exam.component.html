@@ -1,10 +1,18 @@
 <form [formGroup]="examenForm" (ngSubmit)="submit()">
+  <div class="form-fields">
+<div class="fields">
   <mat-form-field appearance="fill">
     <mat-label>Selectează examen</mat-label>
     <mat-select formControlName="examen" [(value)]="selectedExamen" (selectionChange)="onExamenChange()">
-      <mat-option *ngFor="let item of data" [value]="item.examen">{{ item.examen }}</mat-option>
+      <mat-option *ngFor="let item of this.questionService?.data" [value]="item.examen">{{ item.examen }}</mat-option>
     </mat-select>
   </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Număr minim de răspunsuri corecte pentru promovare</mat-label>
+    <input matInput type="number" formControlName="minimumCorrect" min="1" />
+  </mat-form-field>
+</div>
+<div class="fields">
 <div *ngFor="let disciplina of selectedCategori">
     <mat-form-field appearance="fill">
       <mat-label>{{ disciplina.disciplina }} - Nr. întrebări</mat-label>
@@ -13,14 +21,12 @@
         type="number"
         [formControlName]="disciplina.disciplina"
         [attr.max]="disciplina.intrebari.length"
-        min="1"
+        min="0"
       />
       <mat-hint>Max: {{ disciplina.intrebari.length }}</mat-hint>
     </mat-form-field>
   </div>
-  <mat-form-field appearance="fill">
-    <mat-label>Număr minim de răspunsuri corecte pentru promovare</mat-label>
-    <input matInput type="number" formControlName="minimumCorrect" min="1" />
-  </mat-form-field>
-<button mat-raised-button color="primary" >Inceearca examen</button>
+</div>
+</div>
+<button mat-raised-button color="primary" [disabled]="!isValidForm()">Inceearca examen</button>
 </form>
