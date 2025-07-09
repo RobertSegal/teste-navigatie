@@ -37,7 +37,9 @@ export class QuestionService {
     for (let cat of selected.categori) {
       const count = examData[cat.disciplina];
   
-      const shuffledQuestions = [...cat.intrebari]
+      var shuffledOriginalQuestions = this.shuffleAnswers(cat.intrebari);
+
+      const shuffledQuestions = [...shuffledOriginalQuestions]
         .sort(() => Math.random() - 0.5)
         .slice(0, count)
         .map(q => this.shuffleAnswers(q)); // 🟢 aici amesteci răspunsurile
