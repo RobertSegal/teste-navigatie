@@ -36,8 +36,8 @@ export class QuestionService {
   
     for (let cat of selected.categori) {
       const count = examData[cat.disciplina];
-  
-      var shuffledOriginalQuestions = this.shuffleAnswers(cat.intrebari);
+      
+      var shuffledOriginalQuestions = this.shuffleArray(cat.intrebari);
 
       const shuffledQuestions = [...shuffledOriginalQuestions]
         .sort(() => Math.random() - 0.5)

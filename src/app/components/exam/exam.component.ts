@@ -64,8 +64,7 @@ export class ExamComponent {
   }
 
   responseProgress(): number{
-    var answers = this.questions.find(f => f.selectedAnswer != null).length;
+    var answers = this.questions.filter(f => f.selectedAnswer != null)?.length;
     return answers * 100 / this.questions.length;
-    //raspunsuri * 100 / total
   }
 }
